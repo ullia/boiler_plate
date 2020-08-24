@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5006;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { User } = require('./models/User');
 
 const corsOptions = {
-    origin: 'http://localhost:5000/', // 허락하고자 하는 요청 주소
+    // origin: true, // 허락하고자 하는 요청 주소
+    origin: 'http://localhost:5006/', // 허락하고자 하는 요청 주소
     credentials: true, // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
 };
 
@@ -16,12 +17,21 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(bodyParser.json());
 
-
+const db = require('./config/keys');
+const dev = require('./config/dev.js');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://Cielo:@rnrcjs21@cluster0.pdwey.mongodb.net/<dbname>?retryWrites=true&w=majority', {
-    useNewUrlParser : true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false,
-}).then(() => console.log("MongoDB Connected")).catch(err => console.log(err));
+mongoose.connect(db.MongoURI, {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+     useCreateIndex: true, 
+     useFindAndModify: false, 
+}).then(() => 
+    console.log("MongoDB Connected...")
+)
+.catch(err => 
+    console.log(err)
+);
 
 
 app.get('/', (req, res) => {
